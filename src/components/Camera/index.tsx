@@ -124,11 +124,12 @@ function Camera({ setClothesIndex, clothesIndex }: IProps) {
     }
 
     if (newResults && newResults.gestures?.[0]?.[0]?.categoryName) {
-      // console.log(newResults.gestures[0][0].categoryName);
-      console.log(isShowResult);
+      console.log(newResults.gestures[0][0].categoryName);
+      // console.log(newResults.landmarks);
 
       if (newResults.gestures[0][0].categoryName === "Thumb_Up") {
         if (isShowResult === true) {
+          console.log("Đã thêm vào giỏ hàng");
           toast.success("Đã thêm vào giỏ hàng");
         }
         setIsShowResult(false);
@@ -180,6 +181,12 @@ function Camera({ setClothesIndex, clothesIndex }: IProps) {
     }
 
     if (newResults && newResults.landmarks) {
+      //
+      const landmark0_3 = newResults.landmarks[0]?.[3];
+      const landmark0_6 = newResults.landmarks[0]?.[6];
+      const landmark0_7 = newResults.landmarks[0]?.[7];
+
+      //
       const landmark0_4 = newResults.landmarks[0]?.[4];
       const landmark1_8 = newResults.landmarks[1]?.[8];
       const landmark1_4 = newResults.landmarks[1]?.[4];
@@ -241,6 +248,23 @@ function Camera({ setClothesIndex, clothesIndex }: IProps) {
           setIsShowPrevButton(false);
         }
       }
+      if (
+        landmark0_3 &&
+        landmark0_6 &&
+        landmark0_7 &&
+        landmark0_8 &&
+        landmark0_4
+      ) {
+        if (
+          Math.abs(landmark0_3?.x - (landmark0_6?.x + landmark0_7?.x) / 2) <=
+            0.03 &&
+          Math.abs(landmark0_3?.y - (landmark0_6?.y + landmark0_7?.y) / 2) <=
+            0.03 &&
+          Math.abs(landmark0_4?.x - landmark0_8?.x) >= 0.07
+        ) {
+          console.log("tim");
+        }
+      }
 
       if (landmark0_4 && landmark1_8 && landmark1_4 && landmark0_8) {
         const x0_4 = landmark0_4.x;
@@ -251,6 +275,16 @@ function Camera({ setClothesIndex, clothesIndex }: IProps) {
         const y1_4 = landmark1_4.y;
         const x0_8 = landmark0_8.x;
         const y0_8 = landmark0_8.y;
+
+        if (
+          Math.abs(landmark0_4?.x - landmark1_4?.x) <= 0.03 &&
+          Math.abs(landmark0_4?.y - landmark1_4?.y) <= 0.03 &&
+          Math.abs(landmark0_8?.x - landmark1_8?.x) <= 0.03 &&
+          Math.abs(landmark0_8?.y - landmark1_8?.y) <= 0.03 &&
+          Math.abs(landmark0_8?.y - landmark0_4?.y) >= 0.1
+        ) {
+          console.log("tim");
+        }
 
         if (
           Math.abs(x0_4 - x1_8) < 0.03 &&
@@ -348,7 +382,6 @@ function Camera({ setClothesIndex, clothesIndex }: IProps) {
       setIsShowPrevButton(true);
     }
   }, [isHoverPrevButton]);
-
   return (
     <>
       <section id="demos" className="invisible" ref={demosSection}>
