@@ -472,6 +472,7 @@ function Camera({ setClothesIndex, clothesIndex }: IProps) {
                     position: "absolute",
                   }}
                 ></canvas>
+                
                 {isLoading && (
                   <div className="w-[720px] h-[540px] bg-black/50 absolute z-[100] flex justify-center items-center">
                     <Spinner size="lg" className="z-50" />
